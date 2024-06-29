@@ -1,1 +1,75 @@
 
+def main_menu():
+    print("\nTask Manager")
+    print("1. Add Task")
+    print("2. View Tasks")
+    print("3. Mark Task as Completed")
+    print("4. Exit")
+
+# Step 3: Create a function to handle task addition
+def add_task(tasks):
+    title = input("Enter task title: ")
+    description = input("Enter task description: ")
+    due_date = input("Enter due date (YYYY-MM-DD): ")
+    task_id = len(tasks) + 1
+    tasks[task_id] = {'title': title, 'description': description, 'due_date': due_date, 'completed': False}
+    print("Task added successfully!")
+
+# Step 4: Create a function to view tasks
+def view_tasks(tasks):
+    if not tasks:
+        print("No tasks available.")
+    else:
+        for task_id, task in tasks.items():
+            status = "Completed" if task['completed'] else "Pending"
+            print(f"\nTask ID: {task_id}")
+            print(f"Title: {task['title']}")
+            print(f"Description: {task['description']}")
+            print(f"Due Date: {task['due_date']}")
+            print(f"Status: {status}")
+
+# Step 5: Implement a function to mark tasks as completed
+def mark_task_completed(tasks):
+    task_id = int(input("Enter the task ID to mark as completed: "))
+    if task_id in tasks:
+        tasks[task_id]['completed'] = True
+        print("Task marked as completed!")
+    else:
+        print("Invalid task ID.")
+
+# Step 6: Ensure data is persistent
+import json
+
+def save_tasks(tasks, filename="tasks.json"):
+    with open(filename, 'w') as file:
+        json.dump(tasks, file)
+
+def load_tasks(filename="tasks.json"):
+    try:
+        with open(filename, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+
+# Step 7: Run the main loop
+def main():
+    tasks = load_tasks()
+    while True:
+        main_menu()
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            add_task(tasks)
+        elif choice == '2':
+            view_tasks(tasks)
+        elif choice == '3':
+            mark_task_completed(tasks)
+        elif choice == '4':
+            save_tasks(tasks)
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice.")
+
+# Step 8: End
+if _name_ == "_main_":
+    main()
